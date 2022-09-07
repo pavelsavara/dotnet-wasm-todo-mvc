@@ -16,13 +16,13 @@ namespace TodoMVC
         private List<Item> GetLocalStorage()
         {
             if (liveTodos!=null) return liveTodos;
-            return Interop.GetLocalStorage();
+            return Interop.getLocalStorage();
         }
 
         private void SetLocalStorage(List<Item> items)
         {
             liveTodos = items;
-            Interop.SetLocalStorage(items);
+            Interop.setLocalStorage(items);
         }
 
         public void Insert(Item item)
@@ -58,7 +58,7 @@ namespace TodoMVC
 
         public void Remove(long? id, string? title, bool? completed)
         {
-            var todos = Interop.GetLocalStorage();
+            var todos = GetLocalStorage();
             todos = todos.Where(it =>
             {
                 if (id.HasValue && it.Id == id.Value) return false;
@@ -66,12 +66,12 @@ namespace TodoMVC
                 if (completed.HasValue && it.Completed!.Value == completed.Value) return false;
                 return true;
             }).ToList();
-            Interop.SetLocalStorage(todos);
+            SetLocalStorage(todos);
         }
 
         public List<Item> Find(long? id, string? title, bool? completed)
         {
-            var todos = Interop.GetLocalStorage();
+            var todos = GetLocalStorage();
             return todos.Where(it =>
             {
                 if (id.HasValue && it.Id != id.Value) return false;
@@ -83,7 +83,7 @@ namespace TodoMVC
 
         public (int total, int completed, int active) Count()
         {
-            var todos = Interop.GetLocalStorage();
+            var todos = GetLocalStorage();
             return (todos.Count, todos.Where(it => it.Completed.Value).Count(), todos.Where(it => !it.Completed.Value).Count());
         }
 
@@ -91,23 +91,23 @@ namespace TodoMVC
         {
             [DynamicDependency(DynamicallyAccessedMemberTypes.PublicMethods, typeof(JsonTypeInfo))]
             [DynamicDependency(DynamicallyAccessedMemberTypes.PublicMethods, typeof(JsonSerializerContext))]
-            public static List<Item> GetLocalStorage()
+            public static List<Item> getLocalStorage()
             {
-                var json = getLocalStorage();
+                var json = _getLocalStorage();
                 return JsonSerializer.Deserialize<List<Item>>(json) ?? new List<Item>();
             }
 
-            public static void SetLocalStorage(List<Item> items)
+            public static void setLocalStorage(List<Item> items)
             {
                 var json = JsonSerializer.Serialize(items);
-                setLocalStorage(json);
+                _setLocalStorage(json);
             }
 
             [JSImport("store.setLocalStorage", "todoMVC")]
-            internal static partial void setLocalStorage(string json);
+            internal static partial void _setLocalStorage(string json);
 
             [JSImport("store.getLocalStorage", "todoMVC")]
-            internal static partial string getLocalStorage();
+            internal static partial string _getLocalStorage();
         }
     }
 }
