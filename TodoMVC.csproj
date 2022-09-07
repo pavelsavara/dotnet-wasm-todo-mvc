@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+		<WasmMainJSPath>main.js</WasmMainJSPath>
+		<OutputType>Exe</OutputType>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<LangVersion>preview</LangVersion>
+		<EnableAggressiveTrimming>true</EnableAggressiveTrimming>
+		<PublishTrimmed>true</PublishTrimmed>
+		<RunAOTCompilation>true</RunAOTCompilation>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<WasmExtraFilesToDeploy Include="index.html" />
+		<WasmExtraFilesToDeploy Include="*.js" />
+		<WasmExtraFilesToDeploy Include="*.css" />
+	</ItemGroup>
+</Project>

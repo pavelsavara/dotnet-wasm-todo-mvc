@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" data-framework="es6">
+	<head>
+		<meta charset="utf-8">
+		<title>.NET 7 • TodoMVC</title>
+		<link rel="stylesheet" href="todomvc.css">
+    <script type='module' src="./main.js"></script>
+    <script type='module' src="./dotnet.js"></script>
+    <link rel="preload" href="./mono-config.json" as="fetch" crossorigin="anonymous">
+    <link rel="prefetch" href="./dotnet.wasm" as="fetch" crossorigin="anonymous">
+    <link rel="prefetch" href="./icudt.dat" as="fetch" crossorigin="anonymous">
+    <link rel="prefetch" href="./managed/System.Private.CoreLib.dll" as="fetch" crossorigin="anonymous">
+    </head>
+	<body>
+		<section class="todoapp">
+			<header class="header">
+				<h1>todos</h1>
+				<input class="new-todo" placeholder="What needs to be done?" autofocus>
+			</header>
+			<section style="display:none" class="main">
+				<input id="toggle-all" class="toggle-all" type="checkbox">
+				<label for="toggle-all">Mark all as complete</label>
+				<ul class="todo-list"></ul>
+				<footer class="footer">
+					<span class="todo-count"></span>
+					<ul class="filters">
+						<li>
+							<a href="#/" class="selected">All</a>
+						</li>
+						<li>
+						<a href="#/active">Active</a>
+						</li>
+						<li>
+						<a href="#/completed">Completed</a>
+						</li>
+					</ul>
+					<button class="clear-completed">Clear completed</button>
+				</footer>
+			</section>
+		</section>
+		<footer class="info">
+			<p>Written by <a href="https://github.com/pavelsavara">Pavel Savara</a></p>
+			<p>Based on <a href="http://todomvc.com">TodoMVC</a></p>
+		</footer>
+	</body>
+</html>
