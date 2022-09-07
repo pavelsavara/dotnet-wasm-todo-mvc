@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace TodoMVC
 {
@@ -19,13 +20,34 @@ namespace TodoMVC
             this.view = view;
 
             view.BindAddItem(AddItem);
+            view.BindEditItemSave(EditItemSave);
+            view.BindEditItemCancel(EditItemCancel);
+            view.BindRemoveItem(RemoveItem);
+            view.BindToggleItem((id, completed) =>
+            {
+                ToggleCompleted(id, completed);
+                _filter();
+            });
+            view.BindRemoveCompleted(RemoveCompletedItems);
+            view.BindToggleAll(ToggleAll);
+
+            _activeRoute = "";
+            _lastActiveRoute = null;
+        }
+        static Regex rx = new Regex("/^#\\//", RegexOptions.Compiled);
+        public void SetView(string raw)
+        {
+            var route = rx.Replace(raw??"", "");
+            _activeRoute = route;
+            _filter();
+            view.UpdateFilterButtons(route);
         }
 
         public void AddItem(string title)
         {
             store.Insert(new Item
             {
-                Id = DateTime.UtcNow.Ticks,
+                Id = DateTime.UtcNow.Ticks/10000,
                 Title = title,
                 Completed = false
 
@@ -35,7 +57,57 @@ namespace TodoMVC
             _filter(true);
         }
 
-        void _filter(bool force)
+        public void EditItemSave(long id, string title)
+        {
+            if (title.Length != 0)
+            {
+                store.Update(new Item { Id = id, Title = title });
+                view.EditItemDone(id, title);
+            }
+            else
+            {
+                RemoveItem(id);
+            }
+        }
+
+        public void EditItemCancel(long id)
+        {
+            var items = store.Find(id, null, null);
+            var title = items[0].Title;
+            view.EditItemDone(id, title);
+        }
+
+        public void RemoveItem(long id)
+        {
+            store.Remove(id, null, null);
+            _filter();
+            view.RemoveItem(id);
+        }
+
+        public void RemoveCompletedItems()
+        {
+            store.Remove(null, null, true);
+            _filter();
+        }
+
+        public void ToggleCompleted(long id, bool completed)
+        {
+            store.Update(new Item { Id = id, Completed = completed });
+            view.SetItemComplete(id, completed);
+        }
+
+        public void ToggleAll(bool completed)
+        {
+            var todos = store.Find(null, null, !completed);
+            foreach (var item in todos)
+            {
+                ToggleCompleted(item.Id, completed);
+            }
+            _filter();
+        }
+
+
+        void _filter(bool force = false)
         {
             var route = _activeRoute;
 
@@ -59,91 +131,3 @@ namespace TodoMVC
         }
     }
 }
-    /*
-    constructor(store, view) {
-        view.bindAddItem(addItem.bind(this));
-        view.bindEditItemSave(editItemSave.bind(this));
-        view.bindEditItemCancel(editItemCancel.bind(this));
-        view.bindRemoveItem(removeItem.bind(this));
-        view.bindToggleItem((id, completed) => {
-            toggleCompleted(id, completed);
-            _filter();
-        });
-        view.bindRemoveCompleted(removeCompletedItems.bind(this));
-        view.bindToggleAll(toggleAll.bind(this));
-
-        _activeRoute = '';
-        _lastActiveRoute = null;
-    }
-
-    setView(raw) {
-        const route = raw.replace(/ ^#\//, '');
-            _activeRoute = route;
-        _filter();
-        view.updateFilterButtons(route);
-    }
-
-
-    editItemSave(id, title)
-    {
-        if (title.length)
-        {
-            store.update({ id, title}, () =>
-            {
-                view.editItemDone(id, title);
-            });
-        }
-        else
-        {
-            removeItem(id);
-        }
-    }
-
-    editItemCancel(id)
-    {
-        store.find({ id}, data =>
-        {
-            const title = data[0].title;
-            view.editItemDone(id, title);
-        });
-    }
-
-    removeItem(id)
-    {
-        store.remove({ id}, () =>
-        {
-            _filter();
-            view.removeItem(id);
-        });
-    }
-
-    removeCompletedItems()
-    {
-        store.remove({ completed: true}, _filter.bind(this));
-    }
-
-    toggleCompleted(id, completed)
-    {
-        store.update({ id, completed}, () =>
-        {
-            view.setItemComplete(id, completed);
-        });
-    }
-
-    toggleAll(completed)
-    {
-        store.find({ completed: !completed}, data =>
-        {
-            for (let { id}
-            of data) {
-                toggleCompleted(id, completed);
-            }
-        });
-
-        _filter();
-    }
-
-
-}
-
-*/

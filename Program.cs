@@ -1,18 +1,25 @@
 using System;
-using TodoMVC;
+using System.Runtime.InteropServices.JavaScript;
 
-public partial class MainJS
+namespace TodoMVC
 {
-    public static void Main()
+    public partial class MainJS
     {
+        static Controller controller;
 
-        var store = new Store();
+        public static void Main()
+        {
+            var store = new Store();
+            var template = new Template();
+            var view = new View(template);
+            controller = new Controller(store, view);
+            Console.WriteLine("Ready!");
+        }
 
-        var template = new Template();
-        var view = new View(template);
-
-        var controller = new Controller(store, view);
-
-        Console.WriteLine("Hello, World!");
+        [JSExport]
+        public static void OnHashchange(string url)
+        {
+            controller.SetView(url);
+        }
     }
 }

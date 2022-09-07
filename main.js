@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 import { dotnet } from './dotnet.js'
+import { $on } from './helpers.js';
 import {
     setLocalStorage, getLocalStorage
 } from './store.js';
@@ -27,7 +28,11 @@ import {
     updateFilterButtons,
 } from './view.js';
 
-const { setModuleImports, getAssemblyExports } = await dotnet.create();
+let exports;
+const onHashchange = () => exports.TodoMVC.MainJS.OnHashchange(document.location.hash);
+$on(window, 'hashchange', onHashchange);
+
+const { setModuleImports, getAssemblyExports, getConfig } = await dotnet.create();
 
 setModuleImports("todoMVC", {
     view: {
@@ -56,5 +61,8 @@ setModuleImports("todoMVC", {
         setLocalStorage
     }
 });
+const config = getConfig();
+exports = await getAssemblyExports(config.mainAssemblyName);
 
 await dotnet.run();
+onHashchange();

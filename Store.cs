@@ -10,19 +10,31 @@ namespace TodoMVC
 {
     public partial class Store
     {
+        #region in-memory
         private List<Item>? liveTodos;
+        private List<Item> GetLocalStorage()
+        {
+            if (liveTodos!=null) return liveTodos;
+            return Interop.GetLocalStorage();
+        }
+
+        private void SetLocalStorage(List<Item> items)
+        {
+            liveTodos = items;
+            Interop.SetLocalStorage(items);
+        }
 
         public void Insert(Item item)
         {
-            var todos = Interop.GetLocalStorage();
+            var todos = GetLocalStorage();
             todos.Add(item);
-            liveTodos = todos;
-            Interop.SetLocalStorage(todos);
+            SetLocalStorage(todos);
         }
+        #endregion
 
         public void Update(Item item)
         {
-            var todos = Interop.GetLocalStorage();
+            var todos = GetLocalStorage();
             var existing = todos.FirstOrDefault(it => it.Id == item.Id);
             if (existing == null)
             {
@@ -33,14 +45,20 @@ namespace TodoMVC
                 existing.Title = item.Title;
                 existing.Completed = item.Completed;
             }
-            liveTodos = todos;
-            Interop.SetLocalStorage(todos);
+            SetLocalStorage(todos);
         }
 
-        public void RemoveById(long id)
+
+        public void Remove(long? id, string? title, bool? completed)
         {
             var todos = Interop.GetLocalStorage();
-            liveTodos = todos.Where(item => item.Id != id).ToList();
+            todos = todos.Where(it =>
+            {
+                if (id.HasValue && it.Id == id.Value) return false;
+                if (title != null && it.Title == title) return false;
+                if (completed.HasValue && it.Completed == completed.Value) return false;
+                return true;
+            }).ToList();
             Interop.SetLocalStorage(todos);
         }
 
