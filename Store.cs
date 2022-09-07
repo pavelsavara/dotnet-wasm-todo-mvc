@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#pragma warning disable IL2026
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.JavaScript;
 using System.Text.Json;
@@ -88,7 +89,6 @@ namespace TodoMVC
 
         public static partial class Interop
         {
-            [SuppressMessage("Trimming", "IL2026", Justification = "")]
             [DynamicDependency(DynamicallyAccessedMemberTypes.PublicMethods, typeof(JsonTypeInfo))]
             [DynamicDependency(DynamicallyAccessedMemberTypes.PublicMethods, typeof(JsonSerializerContext))]
             public static List<Item> GetLocalStorage()
@@ -97,7 +97,6 @@ namespace TodoMVC
                 return JsonSerializer.Deserialize<List<Item>>(json) ?? new List<Item>();
             }
 
-            [SuppressMessage("Trimming", "IL2026", Justification = "")]
             public static void SetLocalStorage(List<Item> items)
             {
                 var json = JsonSerializer.Serialize(items);
