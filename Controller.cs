@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace TodoMVC
 {
     public class Controller
     {
-        private string _activeRoute;
-        private string _lastActiveRoute;
+        private string? _activeRoute;
+        private string? _lastActiveRoute;
         private Store store { get; }
         private View view { get; }
 
@@ -26,7 +22,7 @@ namespace TodoMVC
             view.BindToggleItem((id, completed) =>
             {
                 ToggleCompleted(id, completed);
-                _filter();
+                _filter(true);
             });
             view.BindRemoveCompleted(RemoveCompletedItems);
             view.BindToggleAll(ToggleAll);
@@ -34,10 +30,10 @@ namespace TodoMVC
             _activeRoute = "";
             _lastActiveRoute = null;
         }
-        static Regex rx = new Regex("/^#\\//", RegexOptions.Compiled);
-        public void SetView(string raw)
+        static Regex rx = new Regex("^#\\/", RegexOptions.Compiled);
+        public void SetView(string? urlHash)
         {
-            var route = rx.Replace(raw??"", "");
+            var route = rx.Replace(urlHash ?? "", "");
             _activeRoute = route;
             _filter();
             view.UpdateFilterButtons(route);
@@ -47,7 +43,7 @@ namespace TodoMVC
         {
             store.Insert(new Item
             {
-                Id = DateTime.UtcNow.Ticks/10000,
+                Id = DateTime.UtcNow.Ticks / 10000,
                 Title = title,
                 Completed = false
 
@@ -73,7 +69,7 @@ namespace TodoMVC
         public void EditItemCancel(long id)
         {
             var items = store.Find(id, null, null);
-            var title = items[0].Title;
+            var title = items[0].Title!;
             view.EditItemDone(id, title);
         }
 
@@ -87,7 +83,7 @@ namespace TodoMVC
         public void RemoveCompletedItems()
         {
             store.Remove(null, null, true);
-            _filter();
+            _filter(true);
         }
 
         public void ToggleCompleted(long id, bool completed)
@@ -103,7 +99,7 @@ namespace TodoMVC
             {
                 ToggleCompleted(item.Id, completed);
             }
-            _filter();
+            _filter(true);
         }
 
 

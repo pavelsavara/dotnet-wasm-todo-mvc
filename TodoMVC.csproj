@@ -9,6 +9,7 @@
 		<EnableAggressiveTrimming>true</EnableAggressiveTrimming>
 		<PublishTrimmed>true</PublishTrimmed>
 		<RunAOTCompilation>true</RunAOTCompilation>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>

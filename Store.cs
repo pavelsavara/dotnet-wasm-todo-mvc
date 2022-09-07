@@ -42,8 +42,14 @@ namespace TodoMVC
             }
             else
             {
-                existing.Title = item.Title;
-                existing.Completed = item.Completed;
+                if (item.Title != null)
+                {
+                    existing.Title = item.Title;
+                }
+                if (item.Completed.HasValue)
+                {
+                    existing.Completed = item.Completed;
+                }
             }
             SetLocalStorage(todos);
         }
@@ -56,7 +62,7 @@ namespace TodoMVC
             {
                 if (id.HasValue && it.Id == id.Value) return false;
                 if (title != null && it.Title == title) return false;
-                if (completed.HasValue && it.Completed == completed.Value) return false;
+                if (completed.HasValue && it.Completed!.Value == completed.Value) return false;
                 return true;
             }).ToList();
             Interop.SetLocalStorage(todos);
@@ -77,7 +83,7 @@ namespace TodoMVC
         public (int total, int completed, int active) Count()
         {
             var todos = Interop.GetLocalStorage();
-            return (todos.Count, todos.Where(it => it.Completed).Count(), todos.Where(it => !it.Completed).Count());
+            return (todos.Count, todos.Where(it => it.Completed.Value).Count(), todos.Where(it => !it.Completed.Value).Count());
         }
 
         public static partial class Interop
@@ -88,7 +94,7 @@ namespace TodoMVC
             public static List<Item> GetLocalStorage()
             {
                 var json = getLocalStorage();
-                return JsonSerializer.Deserialize<List<Item>>(json);
+                return JsonSerializer.Deserialize<List<Item>>(json) ?? new List<Item>();
             }
 
             [SuppressMessage("Trimming", "IL2026", Justification = "")]

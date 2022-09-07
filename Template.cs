@@ -12,10 +12,10 @@ namespace TodoMVC
             foreach (var item in items)
             {
                 sb.Append($@"
-<li data-id=""{item.Id}""{(item.Completed ? " class=\"completed\"" : "")}>
+<li data-id=""{item.Id}""{(item.Completed!.Value ? " class=\"completed\"" : "")}>
 	<div class=""view"">
-		<input class=""toggle"" type=""checkbox"" {(item.Completed ? "checked" : "")}>
-		<label>{escapeForHTML(item.Title)}</label>
+		<input class=""toggle"" type=""checkbox"" {(item.Completed.Value ? "checked" : "")}>
+		<label>{escapeForHTML(item.Title ?? "")}</label>
 		<button class=""destroy""></button>
 	</div>
 </li>`

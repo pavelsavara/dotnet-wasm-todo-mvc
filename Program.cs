@@ -5,7 +5,7 @@ namespace TodoMVC
 {
     public partial class MainJS
     {
-        static Controller controller;
+        static Controller? controller;
 
         public static void Main()
         {
@@ -19,7 +19,7 @@ namespace TodoMVC
         [JSExport]
         public static void OnHashchange(string url)
         {
-            controller.SetView(url);
+            controller?.SetView(url);
         }
     }
 }
