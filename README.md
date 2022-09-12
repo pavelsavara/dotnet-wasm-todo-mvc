@@ -8,4 +8,5 @@ dotnet serve --mime .wasm=application/wasm --mime .js=text/javascript --mime .js
 ```
 
 Live demo here https://pavelsavara.github.io/dotnet-wasm-todo-mvc/
+
 Original code at: https://todomvc.com/
