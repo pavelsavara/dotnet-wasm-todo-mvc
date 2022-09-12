@@ -1,9 +1,7 @@
-const localStorage = window.localStorage;
-const name = 'dotnet-wasm-todomvc'
 export function setLocalStorage(todosJson) {
-	localStorage.setItem(name, todosJson);
+	window.localStorage.setItem('dotnet-wasm-todomvc', todosJson);
 }
 
 export function getLocalStorage() {
-	return localStorage.getItem(name) || '[]';
+	return window.localStorage.getItem('dotnet-wasm-todomvc') || '[]';
 };

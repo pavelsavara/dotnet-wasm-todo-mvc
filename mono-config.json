@@ -17,10 +17,6 @@
     },
     {
       "behavior": "assembly",
-      "name": "System.Diagnostics.Tracing.dll"
-    },
-    {
-      "behavior": "assembly",
       "name": "System.Linq.dll"
     },
     {
@@ -41,10 +37,6 @@
     },
     {
       "behavior": "assembly",
-      "name": "System.Runtime.InteropServices.dll"
-    },
-    {
-      "behavior": "assembly",
       "name": "System.Runtime.InteropServices.JavaScript.dll"
     },
     {
@@ -58,22 +50,6 @@
     {
       "behavior": "assembly",
       "name": "System.Text.RegularExpressions.dll"
-    },
-    {
-      "behavior": "assembly",
-      "name": "System.Threading.dll"
-    },
-    {
-      "behavior": "assembly",
-      "name": "System.Threading.Thread.dll"
-    },
-    {
-      "behavior": "assembly",
-      "name": "System.Threading.ThreadPool.dll"
-    },
-    {
-      "behavior": "assembly",
-      "name": "System.Transactions.Local.dll"
     },
     {
       "behavior": "assembly",
