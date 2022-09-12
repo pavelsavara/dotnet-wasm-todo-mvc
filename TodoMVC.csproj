@@ -10,6 +10,7 @@
 		<PublishTrimmed>true</PublishTrimmed>
 		<RunAOTCompilation>true</RunAOTCompilation>
 		<Nullable>enable</Nullable>
+		<NoWarn>CA1416, IL2026</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>

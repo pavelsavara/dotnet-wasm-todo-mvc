@@ -103,10 +103,10 @@ namespace TodoMVC
                 _setLocalStorage(json);
             }
 
-            [JSImport("store.setLocalStorage", "todoMVC")]
+            [JSImport("setLocalStorage", "todoMVC/store.js")]
             internal static partial void _setLocalStorage(string json);
 
-            [JSImport("store.getLocalStorage", "todoMVC")]
+            [JSImport("getLocalStorage", "todoMVC/store.js")]
             internal static partial string _getLocalStorage();
         }
     }

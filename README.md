@@ -10,7 +10,7 @@ Original code at: https://todomvc.com/
 With Net7 RC1 or later do:
 ```
 dotnet workload install wasm-tools
-dotnet publish -c Release
+dotnet publish -c Release --self-contained
 dotnet serve --directory bin\Release\net7.0\browser-wasm\AppBundle\
 ```
 

@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices.JavaScript;
+using System.Threading.Tasks;
 
 namespace TodoMVC
 {
@@ -7,11 +8,13 @@ namespace TodoMVC
     {
         static Controller? controller;
 
-        public static void Main()
+        public static async Task Main()
         {
+            await JSHost.ImportAsync("todoMVC/store.js", "./store.js");
+            await JSHost.ImportAsync("todoMVC/view.js", "./view.js");
+
             var store = new Store();
-            var template = new Template();
-            var view = new View(template);
+            var view = new View(new Template());
             controller = new Controller(store, view);
             Console.WriteLine("Ready!");
         }

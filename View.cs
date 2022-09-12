@@ -35,42 +35,42 @@ namespace TodoMVC
 
         public static partial class Interop
         {
-            [JSImport("view.initView", "todoMVC")]
+            [JSImport("initView", "todoMVC/view.js")]
             public static partial void initView();
-            [JSImport("view.clearNewTodo", "todoMVC")]
+            [JSImport("clearNewTodo", "todoMVC/view.js")]
             public static partial void clearNewTodo();
-            [JSImport("view.showItems", "todoMVC")]
+            [JSImport("showItems", "todoMVC/view.js")]
             public static partial void showItems(string itemsHtml);
-            [JSImport("view.setItemsLeft", "todoMVC")]
+            [JSImport("setItemsLeft", "todoMVC/view.js")]
             public static partial void setItemsLeft(string itemsLeftHtml);
-            [JSImport("view.setClearCompletedButtonVisibility", "todoMVC")]
+            [JSImport("setClearCompletedButtonVisibility", "todoMVC/view.js")]
             public static partial void setClearCompletedButtonVisibility(bool visible);
-            [JSImport("view.setCompleteAllCheckbox", "todoMVC")]
+            [JSImport("setCompleteAllCheckbox", "todoMVC/view.js")]
             public static partial void setCompleteAllCheckbox(bool ischecked);
-            [JSImport("view.setItemComplete", "todoMVC")]
+            [JSImport("setItemComplete", "todoMVC/view.js")]
             public static partial void setItemComplete([JSMarshalAs<JSType.Number>] long id, bool completed);
-            [JSImport("view.setMainVisibility", "todoMVC")]
+            [JSImport("setMainVisibility", "todoMVC/view.js")]
             public static partial void setMainVisibility(bool visible);
-            [JSImport("view.removeItem", "todoMVC")]
+            [JSImport("removeItem", "todoMVC/view.js")]
             public static partial void removeItem([JSMarshalAs<JSType.Number>] long id);
-            [JSImport("view.editItemDone", "todoMVC")]
+            [JSImport("editItemDone", "todoMVC/view.js")]
             public static partial void editItemDone([JSMarshalAs<JSType.Number>] long id, string title);
-            [JSImport("view.updateFilterButtons", "todoMVC")]
+            [JSImport("updateFilterButtons", "todoMVC/view.js")]
             public static partial void updateFilterButtons(string route);
 
-            [JSImport("view.bindAddItem", "todoMVC")]
+            [JSImport("bindAddItem", "todoMVC/view.js")]
             public static partial void bindAddItem([JSMarshalAs<JSType.Function<JSType.String>>] Action<string> handler);
-            [JSImport("view.bindEditItemSave", "todoMVC")]
+            [JSImport("bindEditItemSave", "todoMVC/view.js")]
             public static partial void bindEditItemSave([JSMarshalAs<JSType.Function<JSType.Number, JSType.String>>] Action<long, string> handler);
-            [JSImport("view.bindEditItemCancel", "todoMVC")]
+            [JSImport("bindEditItemCancel", "todoMVC/view.js")]
             public static partial void bindEditItemCancel([JSMarshalAs<JSType.Function<JSType.Number>>] Action<long> handler);
-            [JSImport("view.bindRemoveCompleted", "todoMVC")]
+            [JSImport("bindRemoveCompleted", "todoMVC/view.js")]
             public static partial void bindRemoveCompleted([JSMarshalAs<JSType.Function>] Action handler);
-            [JSImport("view.bindRemoveItem", "todoMVC")]
+            [JSImport("bindRemoveItem", "todoMVC/view.js")]
             public static partial void bindRemoveItem([JSMarshalAs<JSType.Function<JSType.Number>>] Action<long> handler);
-            [JSImport("view.bindToggleAll", "todoMVC")]
+            [JSImport("bindToggleAll", "todoMVC/view.js")]
             public static partial void bindToggleAll([JSMarshalAs<JSType.Function<JSType.Boolean>>] Action<bool> handler);
-            [JSImport("view.bindToggleItem", "todoMVC")]
+            [JSImport("bindToggleItem", "todoMVC/view.js")]
             public static partial void bindToggleItem([JSMarshalAs<JSType.Function<JSType.Number, JSType.Boolean>>] Action<long, bool> handler);
         }
     }
