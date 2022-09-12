@@ -1,11 +1,4 @@
-# Port of good old 
-
-
-
-
 # Port of good old Todo-MCV
-
-Original code at: https://todomvc.com/
 
 With Net7 RC1 or later do:
 ```
@@ -15,3 +8,4 @@ dotnet serve --mime .wasm=application/wasm --mime .js=text/javascript --mime .js
 ```
 
 Live demo here https://pavelsavara.github.io/dotnet-wasm-todo-mvc/
+Original code at: https://todomvc.com/
