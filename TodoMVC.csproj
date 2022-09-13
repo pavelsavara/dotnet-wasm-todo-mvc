@@ -6,8 +6,8 @@
 		<OutputType>Exe</OutputType>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<LangVersion>preview</LangVersion>
-		<EnableAggressiveTrimming>true</EnableAggressiveTrimming>
 		<PublishTrimmed>true</PublishTrimmed>
+		<TrimMode>full</TrimMode>
 		<RunAOTCompilation>true</RunAOTCompilation>
 		<Nullable>enable</Nullable>
 		<NoWarn>CA1416, IL2026</NoWarn>
