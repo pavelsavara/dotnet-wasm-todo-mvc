@@ -18,7 +18,7 @@ namespace TodoMVC
 		<label>{escapeForHTML(item.Title ?? "")}</label>
 		<button class=""destroy""></button>
 	</div>
-</li>`
+</li>
 ");
             }
             return sb.ToString();
