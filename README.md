@@ -1,4 +1,4 @@
-# Port of good old Todo-MCV
+# Port of good old Todo-MVC
 
 With Net7 RC1 or later do:
 ```
