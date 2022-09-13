@@ -1,4 +1,4 @@
-# Port of good old Todo-MVC
+# Port of famous Todo-MVC to .NET on WASM
 
 With Net7 RC1 or later do:
 ```
