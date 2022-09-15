@@ -10,7 +10,7 @@
 		<TrimMode>full</TrimMode>
 		<RunAOTCompilation>true</RunAOTCompilation>
 		<Nullable>enable</Nullable>
-		<NoWarn>CA1416, IL2026</NoWarn>
+		<NoWarn>IL2026</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
