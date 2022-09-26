@@ -4,8 +4,6 @@ using System.Linq;
 using System.Runtime.InteropServices.JavaScript;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
-using System.Diagnostics.CodeAnalysis;
 
 namespace TodoMVC
 {
@@ -89,17 +87,18 @@ namespace TodoMVC
 
         public static partial class Interop
         {
-            [DynamicDependency(DynamicallyAccessedMemberTypes.PublicMethods, typeof(JsonTypeInfo))]
-            [DynamicDependency(DynamicallyAccessedMemberTypes.PublicMethods, typeof(JsonSerializerContext))]
+            [JsonSerializable(typeof(List<Item>))]
+            private partial class ItemListSerializerContext : JsonSerializerContext { }
+            
             public static List<Item> getLocalStorage()
             {
                 var json = _getLocalStorage();
-                return JsonSerializer.Deserialize<List<Item>>(json) ?? new List<Item>();
+                return JsonSerializer.Deserialize(json, ItemListSerializerContext.Default.ListItem) ?? new List<Item>();
             }
 
             public static void setLocalStorage(List<Item> items)
             {
-                var json = JsonSerializer.Serialize(items);
+                var json = JsonSerializer.Serialize(items, ItemListSerializerContext.Default.ListItem);
                 _setLocalStorage(json);
             }
 
