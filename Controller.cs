@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace TodoMVC
 {
-    public class Controller
+    public partial class Controller
     {
         private string? _activeRoute;
         private string? _lastActiveRoute;
@@ -30,10 +30,13 @@ namespace TodoMVC
             _activeRoute = "";
             _lastActiveRoute = null;
         }
-        static Regex rx = new Regex("^#\\/", RegexOptions.Compiled);
+
+        [GeneratedRegex("^#\\/")]
+        private static partial Regex GetUrlHashRegex();
+        
         public void SetView(string? urlHash)
         {
-            var route = rx.Replace(urlHash ?? "", "");
+            var route = GetUrlHashRegex().Replace(urlHash ?? "", "");
             _activeRoute = route;
             _filter();
             view.UpdateFilterButtons(route);

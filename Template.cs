@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace TodoMVC
 {
@@ -15,7 +15,7 @@ namespace TodoMVC
 <li data-id=""{item.Id}""{(item.Completed!.Value ? " class=\"completed\"" : "")}>
 	<div class=""view"">
 		<input class=""toggle"" type=""checkbox"" {(item.Completed.Value ? "checked" : "")}>
-		<label>{escapeForHTML(item.Title ?? "")}</label>
+		<label>{WebUtility.HtmlEncode(item.Title ?? "")}</label>
 		<button class=""destroy""></button>
 	</div>
 </li>
@@ -27,15 +27,6 @@ namespace TodoMVC
         public string itemCounter(int activeTodos)
         {
             return $"{activeTodos} item{(activeTodos != 1 ? "s" : "")} left";
-        }
-
-        static Regex escape = new Regex("/[&<]/g", RegexOptions.Compiled);
-        public static string escapeForHTML(string s)
-        {
-            return escape.Replace(s, (Match match) =>
-            {
-                return match.Value == "&" ? "&amp;" : "&lt;";
-            });
         }
     }
 }
