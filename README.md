@@ -45,3 +45,15 @@ Replace line 129 with:
 ```
 <RunArguments Condition="'$(RunArguments)' == ''">exec &quot;$([MSBuild]::NormalizePath($(WasmAppHostDir), 'WasmAppHost.dll'))&quot; --runtime-config $(_AppBundleDirForRunCommand)/$(AssemblyName).runtimeconfig.json $(WasmHostArguments)</RunArguments>
 ```
+
+## How to test with Playwright
+- In first console
+    ```
+    dotnet run
+    ```
+- In second console
+    ```
+    dotnet build test\PlaywrightTests.csproj
+    pwsh test/bin/Debug/net7.0/playwright.ps1 install
+    dotnet test test\PlaywrightTests.csproj
+    ```
