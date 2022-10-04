@@ -17,4 +17,9 @@
 		<WasmExtraFilesToDeploy Include="*.js" />
 		<WasmExtraFilesToDeploy Include="*.css" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="test\**" />
+	  <None Remove="test\**" />
+	</ItemGroup>
 </Project>
