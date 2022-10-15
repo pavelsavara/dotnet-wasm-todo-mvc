@@ -1,26 +1,28 @@
 using Microsoft.Playwright;
 using Xunit;
 
+namespace PlaywrightTests;
+
 public class PlaywrightTests
 {
     [Fact]
     public async Task Full()
     {
 #if DEBUG
-        var headless = false;
-        var slowMo = 250;
+        const bool headless = false;
+        const int slowMo = 250;
 #else
-        var headless = true;
-        var slowMo = 0;
+        const bool headless = true;
+        const int slowMo = 0;
 #endif
 
         var playwright = await Playwright.CreateAsync();
-        var browser = await playwright.Chromium.LaunchAsync(new() { Headless = headless, SlowMo = slowMo });
+        var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = headless, SlowMo = slowMo });
         var page = await browser.NewPageAsync();
 
         await page.GotoAsync("http://127.0.0.1:9000/index.html");
         Assert.Equal("todos", await page.Locator("h1").TextContentAsync());
-        
+
         // Wait to bind events
         await Task.Delay(1500);
 
@@ -41,7 +43,7 @@ public class PlaywrightTests
         Assert.Equal(string.Empty, await newTodo.InputValueAsync());
         Assert.Equal("1 item left", await todoCount.TextContentAsync());
         Assert.Equal(1, await todoLi.CountAsync());
-        Assert.Equal( "Buy milk", await todoLi.First.Locator("label").TextContentAsync());
+        Assert.Equal("Buy milk", await todoLi.First.Locator("label").TextContentAsync());
         Assert.DoesNotContain("completed", await todoLi.First.GetAttributeAsync("class"));
 
         // Complete item

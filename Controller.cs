@@ -1,132 +1,127 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿namespace TodoMVC;
 
-namespace TodoMVC
+public partial class Controller
 {
-    public partial class Controller
+    private string? _activeRoute;
+    private string? _lastActiveRoute;
+    private Store Store { get; }
+    private View View { get; }
+
+    public Controller(Store store, View view)
     {
-        private string? _activeRoute;
-        private string? _lastActiveRoute;
-        private Store store { get; }
-        private View view { get; }
+        Store = store;
+        View = view;
 
-        public Controller(Store store, View view)
+        view.BindAddItem(AddItem);
+        view.BindEditItemSave(EditItemSave);
+        view.BindEditItemCancel(EditItemCancel);
+        view.BindRemoveItem(RemoveItem);
+        view.BindToggleItem((id, completed) =>
         {
-            this.store = store;
-            this.view = view;
+            ToggleCompleted(id, completed);
+            Filter(true);
+        });
+        view.BindRemoveCompleted(RemoveCompletedItems);
+        view.BindToggleAll(ToggleAll);
 
-            view.BindAddItem(AddItem);
-            view.BindEditItemSave(EditItemSave);
-            view.BindEditItemCancel(EditItemCancel);
-            view.BindRemoveItem(RemoveItem);
-            view.BindToggleItem((id, completed) =>
+        _activeRoute = string.Empty;
+        _lastActiveRoute = null;
+    }
+
+    [GeneratedRegex("^#\\/")]
+    private static partial Regex GetUrlHashRegex();
+
+    public void SetView(string? urlHash)
+    {
+        var route = GetUrlHashRegex().Replace(urlHash ?? string.Empty, string.Empty);
+        _activeRoute = route;
+        Filter();
+        View.UpdateFilterButtons(route);
+    }
+
+    public void AddItem(string title)
+    {
+        Store.Insert(new Todo
+        {
+            Id = DateTime.UtcNow.Ticks / 10000,
+            Title = title,
+            Completed = false
+
+        });
+
+        View.ClearNewTodo();
+        Filter(true);
+    }
+
+    public void EditItemSave(long id, string title)
+    {
+        if (title.Length != 0)
+        {
+            Store.Update(new Todo { Id = id, Title = title });
+            View.EditItemDone(id, title);
+        }
+        else
+        {
+            RemoveItem(id);
+        }
+    }
+
+    public void EditItemCancel(long id)
+    {
+        var items = Store.Find(id, null, null);
+        var title = items[0].Title!;
+        View.EditItemDone(id, title);
+    }
+
+    public void RemoveItem(long id)
+    {
+        Store.Remove(id, null, null);
+        Filter();
+        View.RemoveItem(id);
+    }
+
+    public void RemoveCompletedItems()
+    {
+        Store.Remove(null, null, true);
+        Filter(true);
+    }
+
+    public void ToggleCompleted(long id, bool completed)
+    {
+        Store.Update(new Todo { Id = id, Completed = completed });
+        View.SetItemComplete(id, completed);
+    }
+
+    public void ToggleAll(bool completed)
+    {
+        var todos = Store.Find(null, null, !completed);
+        foreach (var item in todos)
+        {
+            ToggleCompleted(item.Id, completed);
+        }
+        Filter(true);
+    }
+
+    private void Filter(bool force = false)
+    {
+        var route = _activeRoute;
+
+        if (force || _lastActiveRoute != string.Empty || _lastActiveRoute != route)
+        {
+            var todos = route switch
             {
-                ToggleCompleted(id, completed);
-                _filter(true);
-            });
-            view.BindRemoveCompleted(RemoveCompletedItems);
-            view.BindToggleAll(ToggleAll);
-
-            _activeRoute = "";
-            _lastActiveRoute = null;
+                "active" => Store.Find(null, null, false),
+                "completed" => Store.Find(null, null, true),
+                _ => Store.Find(null, null, null),
+            };
+            View.ShowItems(todos);
         }
 
-        [GeneratedRegex("^#\\/")]
-        private static partial Regex GetUrlHashRegex();
-        
-        public void SetView(string? urlHash)
-        {
-            var route = GetUrlHashRegex().Replace(urlHash ?? "", "");
-            _activeRoute = route;
-            _filter();
-            view.UpdateFilterButtons(route);
-        }
-
-        public void AddItem(string title)
-        {
-            store.Insert(new Item
-            {
-                Id = DateTime.UtcNow.Ticks / 10000,
-                Title = title,
-                Completed = false
-
-            });
-
-            view.ClearNewTodo();
-            _filter(true);
-        }
-
-        public void EditItemSave(long id, string title)
-        {
-            if (title.Length != 0)
-            {
-                store.Update(new Item { Id = id, Title = title });
-                view.EditItemDone(id, title);
-            }
-            else
-            {
-                RemoveItem(id);
-            }
-        }
-
-        public void EditItemCancel(long id)
-        {
-            var items = store.Find(id, null, null);
-            var title = items[0].Title!;
-            view.EditItemDone(id, title);
-        }
-
-        public void RemoveItem(long id)
-        {
-            store.Remove(id, null, null);
-            _filter();
-            view.RemoveItem(id);
-        }
-
-        public void RemoveCompletedItems()
-        {
-            store.Remove(null, null, true);
-            _filter(true);
-        }
-
-        public void ToggleCompleted(long id, bool completed)
-        {
-            store.Update(new Item { Id = id, Completed = completed });
-            view.SetItemComplete(id, completed);
-        }
-
-        public void ToggleAll(bool completed)
-        {
-            var todos = store.Find(null, null, !completed);
-            foreach (var item in todos)
-            {
-                ToggleCompleted(item.Id, completed);
-            }
-            _filter(true);
-        }
-
-
-        void _filter(bool force = false)
-        {
-            var route = _activeRoute;
-
-            if (force || _lastActiveRoute != "" || _lastActiveRoute != route)
-            {
-                var todos = route switch
-                {
-                    "active" => store.Find(null, null, false),
-                    "completed" => store.Find(null, null, true),
-                    _ => store.Find(null, null, null),
-                };
-                view.ShowItems(todos);
-            }
-
-            var count = store.Count();
-            view.SetItemsLeft(count.active);
-            view.SetClearCompletedButtonVisibility(count.completed != 0);
-            view.SetCompleteAllCheckbox(count.completed == count.total);
-            view.SetMainVisibility(count.total != 0);
-            _lastActiveRoute = route;
-        }
+        var (total, completed, active) = Store.Count();
+        View.SetItemsLeft(active);
+        View.SetClearCompletedButtonVisibility(completed != 0);
+        View.SetCompleteAllCheckbox(completed == total);
+        View.SetMainVisibility(total != 0);
+        _lastActiveRoute = route;
     }
 }
