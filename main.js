@@ -5,8 +5,6 @@ const { getAssemblyExports, getConfig } = await dotnet.create();
 
 let exports = await getAssemblyExports(getConfig().mainAssemblyName);
 
-debugger;
-
 const onHashchange = () => exports.TodoMVC.MainJs.OnHashchange(document.location.hash);
 $on(window, 'hashchange', onHashchange);
 
