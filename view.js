@@ -1,4 +1,4 @@
-import { qs, $on, $delegate } from "./helpers.js";
+import { qs, $on, $delegate } from './helpers.js';
 
 const itemId = element => parseInt(element.parentNode.dataset.id || element.parentNode.parentNode.dataset.id, 10);
 const enterKey = 13;
@@ -12,13 +12,13 @@ let $toggleAll;
 let $newTodo;
 
 export function initView() {
-	$todoList = qs(".todo-list");
-	$todoItemCounter = qs(".todo-count");
-	$clearCompleted = qs(".clear-completed");
-	$main = qs(".main");
-	$toggleAll = qs(".toggle-all");
-	$newTodo = qs(".new-todo");
-	$delegate($todoList, "li label", "dblclick", ({ target }) => {
+	$todoList = qs('.todo-list');
+	$todoItemCounter = qs('.todo-count');
+	$clearCompleted = qs('.clear-completed');
+	$main = qs('.main');
+	$toggleAll = qs('.toggle-all');
+	$newTodo = qs('.new-todo');
+	$delegate($todoList, 'li label', 'dblclick', ({ target }) => {
 		editItem(target);
 	});
 }
@@ -26,10 +26,10 @@ export function initView() {
 export function editItem(target) {
 	const listItem = target.parentElement.parentElement;
 
-	listItem.classList.add("editing");
+	listItem.classList.add('editing');
 
-	const input = window.document.createElement("input");
-	input.className = "edit";
+	const input = window.document.createElement('input');
+	input.className = 'edit';
 
 	input.value = target.innerText;
 	listItem.appendChild(input);
@@ -41,7 +41,7 @@ export function showItems(itemsHtml) {
 }
 
 export function removeItem(id) {
-	const elem = qs(`[data-id="${id}"]`);
+	const elem = qs(`[data-id='${id}']`);
 
 	if (elem) {
 		$todoList.removeChild(elem);
@@ -53,11 +53,11 @@ export function setItemsLeft(itemsLeftHtml) {
 }
 
 export function setClearCompletedButtonVisibility(visible) {
-	$clearCompleted.style.display = !!visible ? "block" : "none";
+	$clearCompleted.style.display = !!visible ? 'block' : 'none';
 }
 
 export function setMainVisibility(visible) {
-	$main.style.display = !!visible ? "block" : "none";
+	$main.style.display = !!visible ? 'block' : 'none';
 }
 
 export function setCompleteAllCheckbox(checked) {
@@ -65,40 +65,40 @@ export function setCompleteAllCheckbox(checked) {
 }
 
 export function updateFilterButtons(route) {
-	qs(".filters .selected").className = "";
-	qs(`.filters [href="#/${route}"]`).className = "selected";
+	qs('.filters .selected').className = '';
+	qs(`.filters [href='#/${route}']`).className = 'selected';
 }
 
 export function clearNewTodo() {
-	$newTodo.value = "";
+	$newTodo.value = '';
 }
 
 export function setItemComplete(id, completed) {
-	const listItem = qs(`[data-id="${id}"]`);
+	const listItem = qs(`[data-id='${id}']`);
 
 	if (!listItem) {
 		return;
 	}
 
-	listItem.className = completed ? "completed" : "";
+	listItem.className = completed ? 'completed' : '';
 
 	// In case it was toggled from an event and not by clicking the checkbox
-	qs("input", listItem).checked = completed;
+	qs('input', listItem).checked = completed;
 }
 
 export function editItemDone(id, title) {
-	const listItem = qs(`[data-id="${id}"]`);
+	const listItem = qs(`[data-id='${id}']`);
 
-	const input = qs("input.edit", listItem);
+	const input = qs('input.edit', listItem);
 	listItem.removeChild(input);
 
-	listItem.classList.remove("editing");
+	listItem.classList.remove('editing');
 
-	qs("label", listItem).textContent = title;
+	qs('label', listItem).textContent = title;
 }
 
 export function bindAddItem(handler) {
-	$on($newTodo, "change", ({ target }) => {
+	$on($newTodo, 'change', ({ target }) => {
 		const title = target.value.trim();
 		if (title) {
 			handler(title);
@@ -107,36 +107,36 @@ export function bindAddItem(handler) {
 }
 
 export function bindRemoveCompleted(handler) {
-	$on($clearCompleted, "click", handler);
+	$on($clearCompleted, 'click', handler);
 }
 
 export function bindToggleAll(handler) {
-	$on($toggleAll, "click", ({ target }) => {
+	$on($toggleAll, 'click', ({ target }) => {
 		handler(target.checked);
 	});
 }
 
 export function bindRemoveItem(handler) {
-	$delegate($todoList, ".destroy", "click", ({ target }) => {
+	$delegate($todoList, '.destroy', 'click', ({ target }) => {
 		handler(itemId(target));
 	});
 }
 
 export function bindToggleItem(handler) {
-	$delegate($todoList, ".toggle", "click", ({ target }) => {
+	$delegate($todoList, '.toggle', 'click', ({ target }) => {
 		handler(itemId(target), target.checked);
 	});
 }
 
 export function bindEditItemSave(handler) {
-	$delegate($todoList, "li .edit", "blur", ({ target }) => {
+	$delegate($todoList, 'li .edit', 'blur', ({ target }) => {
 		if (!target.dataset.iscanceled) {
 			handler(itemId(target), target.value.trim());
 		}
 	}, true);
 
 	// Remove the cursor from the input when you hit enter just like if it were a real form
-	$delegate($todoList, "li .edit", "keypress", ({ target, keyCode }) => {
+	$delegate($todoList, 'li .edit', 'keypress', ({ target, keyCode }) => {
 		if (keyCode === enterKey) {
 			target.blur();
 		}
@@ -144,7 +144,7 @@ export function bindEditItemSave(handler) {
 }
 
 export function bindEditItemCancel(handler) {
-	$delegate($todoList, "li .edit", "keyup", ({ target, keyCode }) => {
+	$delegate($todoList, 'li .edit', 'keyup', ({ target, keyCode }) => {
 		if (keyCode === escapeKey) {
 			target.dataset.iscanceled = true;
 			target.blur();
