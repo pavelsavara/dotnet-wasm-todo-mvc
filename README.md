@@ -41,13 +41,6 @@ Original code at: https://todomvc.com/
 
 *All of above would be much simpler as just "F5" in Visual Studio when we release final .NET 7*
 
-## Workaround for 7.0.0-rc1.22426.10
-Fix `C:\Program Files\dotnet\packs\Microsoft.NET.Runtime.WebAssembly.Sdk\7.0.0-rc.1.22426.10\Sdk\WasmApp.targets`
-Replace line 129 with:
-```
-<RunArguments Condition="'$(RunArguments)' == ''">exec &quot;$([MSBuild]::NormalizePath($(WasmAppHostDir), 'WasmAppHost.dll'))&quot; --runtime-config $(_AppBundleDirForRunCommand)/$(AssemblyName).runtimeconfig.json $(WasmHostArguments)</RunArguments>
-```
-
 ## How to test with Playwright
 - In first console
     ```
