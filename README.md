@@ -16,7 +16,6 @@ Original code at: https://todomvc.com/
 
 ## How to debug with chrome dev tools
 
-- If you are on .NET 7 RC1 apply workaround below
 - Start the app with debugging enabled:
     ```
     dotnet run --debug
